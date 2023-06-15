@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=scavengers
+POSTGRES_USER=JdshiVExSgFVoEMkkPuyBEmvHJTmbXSh
+POSTGRES_PASSWORD=u2CFl2UiRVr4AidL8epeZypGUmHJLm2JPIJrxGtHP9Nf3ru9LZ8WXr207dVdSgmI

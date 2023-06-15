@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="map" style="height: 600px; width: 1200px;"></div>
+
+<script>
+    var map = L.map('map');
+
+    // Use the Geolocation API to get the user's current location
+    map.locate({ setView: true, maxZoom: 16 });
+
+    function onLocationFound(e) {
+        var radius = e.accuracy / 2;
+
+        L.marker(e.latlng).addTo(map)
+            .bindPopup("You are here").openPopup();
+
+        L.circle(e.latlng, radius).addTo(map);
+
+        fetch('treasure/api/markers/')
+            .then(response => response.json())
+            .then(markerData => {
+                addMarkersToMap(markerData);
+            })
+            .catch(error => {
+                console.error('Error fetching marker data:', error);
+            });
+    }
+
+    function onLocationError(e) {
+        alert(e.message);
+    }
+
+    function addMarkersToMap(markerData) {
+        var markers = L.markerClusterGroup();
+
+        markerData.forEach(function(marker) {
+            var marker = L.marker([marker.latitude, marker.longitude]);
+            marker.bindPopup("Treasure: " + marker.name);
+            markers.addLayer(marker);
+        });
+
+        map.addLayer(markers);
+    }
+
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18
+    }).addTo(map);
+</script>
+
+
+
+    {% comment %} <h1>This is where the TREASURE will go!</h1>
+    <br></br>
+    <h2>TODO:</h2>
+    <list>
+    <li>Add a form to add a new treasure</li>
+    <li>Add a list of all the treasures</li>
+    <li>Add a way to view a treasure</li>
+    <li>Add a way to edit a treasure</li>
+    <li>Add a way to delete a treasure</li>
+    <li>Add a way to find treasure nearby</li>
+    <li>Add a way to search treasure by name</li>
+    <li>Add a way to search treasure by location</li>
+    <li>Add a way to search treasure by category</li>
+    <li>Add a way to search treasure by date</li>
+    <li>Add a way to search treasure by owner</li>
+    <li>Add a way to search treasure by price</li>
+
+    </list>
+    {% endcomment %}
+
+    <h3>Upload Image</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+         {{ form.as_p }}
+        <button type="submit">Upload</button>
+      </form>
+      
+      {% if img_obj %}
+        <h3>Succesfully uploaded : {{img_obj.title}}</h3>
+        <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
+      {% endif %}
+
+{% endblock content %}
