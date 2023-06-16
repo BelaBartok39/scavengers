@@ -1,34 +1,33 @@
+import json
+from decimal import Decimal
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
-from django.http import JsonResponse
-from .forms import ImageForm
-from .models import treasure
+from .models import Treasure
+
+
+class DecimalJSONEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
 
 
 def index(request):
+    treasures = Treasure.objects.all()
+    treasures_data = []  # List to hold the treasures' data
 
-    if request.method == 'POST':
-        
-        form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            # Get the current instance object to display in the template
-            img_obj = form.instance
-            return render(request, "treasure/base.html", {'form': form, 'img_obj': img_obj})
-    else:
-        form = ImageForm()
-    return render(request, "treasure/base.html", {'form': form})
-
-def get_marker_data(request):
-    treasures = treasure.objects.all()
-    marker_data = [
-        {
-            'latitude': treasure.latitude,
-            'longitude': treasure.longitude,
-            'name': treasure.name
+    # Prepare the treasures' data
+    for treasure in treasures:
+        treasure_data = {
+            'latitude': float(treasure.latitude),
+            'longitude': float(treasure.longitude),
+            'name': treasure.name,
+            'description': treasure.description,
+            'hints': treasure.hints,
         }
-        for treasure in treasures
-    ]
-    return JsonResponse(marker_data, safe=False)
+        treasures_data.append(treasure_data)
 
+    context = {'treasures_data_json': json.dumps(treasures_data, cls=DecimalJSONEncoder)}
 
+    return render(request, "treasure/base.html", context)
 
