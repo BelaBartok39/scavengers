@@ -3,6 +3,10 @@
 
 {% block content %}
 
-<h1>This is the landing page, we will figure it out later</h1>
+<h1>Welcome to Scavengers</h1>
+<form action="{% url 'treasure_search' %}" method="GET">
+    <input type="text" name="search_query" placeholder="Search for treasures">
+    <input type="submit" value="Search">
+</form>
 
 {% endblock %}

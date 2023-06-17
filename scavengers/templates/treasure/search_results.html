@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Search Results</h2>
+    <ul>
+        {% for treasure in treasures %}
+            <li>{{ treasure.name }}</li>
+        {% empty %}
+            <li>No treasures found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

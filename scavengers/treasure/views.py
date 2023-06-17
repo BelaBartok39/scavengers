@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from .models import Treasure
+from django.db import models
 
 
 class DecimalJSONEncoder(DjangoJSONEncoder):
@@ -31,3 +32,10 @@ def index(request):
 
     return render(request, "treasure/base.html", context)
 
+def search_view(request):
+    query = request.GET.get('search_query')
+    treasures = Treasure.objects.filter(
+        models.Q(name__icontains=query) | models.Q(zipcode=query) |
+        models.Q(city__icontains=query) | models.Q(state__icontains=query)
+    )
+    return render(request, 'treasure/search_results.html', {'treasures': treasures})
