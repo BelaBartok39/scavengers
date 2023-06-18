@@ -2,8 +2,11 @@ import json
 from decimal import Decimal
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
-from .models import Treasure
 from django.db import models
+
+from .models import Treasure
+from django.views.generic import CreateView
+from .forms import TreasureCreationForm
 
 
 class DecimalJSONEncoder(DjangoJSONEncoder):
@@ -39,3 +42,14 @@ def search_view(request):
         models.Q(city__icontains=query) | models.Q(state__icontains=query)
     )
     return render(request, 'treasure/search_results.html', {'treasures': treasures})
+
+class TreasureCreateView(CreateView):
+    model = Treasure
+    form_class = TreasureCreationForm
+    template_name = 'treasure_create.html'
+    success_url = '/treasure/'  # URL to redirect to after successful creation
+
+    def form_valid(self, form):
+        # Set the treasure's creator to the current user
+        form.instance.creator = self.request.user
+        return super().form_valid(form)

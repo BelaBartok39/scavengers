@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+
 def treasure_image_path(instance, filename):
     # Define the path where the treasure images will be uploaded
-    return f'treasure_images/user_{instance.user.id}/{filename}'
+    return f'treasure_images/user_{instance.creator.id}/{filename}'
 
 class Treasure(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,null=True)

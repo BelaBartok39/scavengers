@@ -20,36 +20,5 @@
   padding: 15px;
 }
 
-.searchbar {
-  display: flex;
-}
 
-.title {
-  font-size: 2rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .title {
-      font-size: 3rem;
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-  }
-}
-
-.landing-page {
-  background-image: url('/static/images/treasure.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.landing-content {
-  text-align: center;
-}
 
