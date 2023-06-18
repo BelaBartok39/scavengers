@@ -15,12 +15,14 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
     path("treasure/", include("treasure.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
+# Serve media files during development
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
+    # these urls in the browser to see how these error pages look like.
     urlpatterns += [
         path(
             "400/",
